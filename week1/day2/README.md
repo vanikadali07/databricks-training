@@ -1,76 +1,58 @@
-# 📅 Week 1 - Day 2
+# Week 1 - Day 2
 
-## 📌 Overview
-This day focused on completing the remaining SQL queries and strengthening understanding of advanced SQL concepts such as subqueries, joins, and aggregations.
+## Overview
+This day focused on completing the remaining SQL practice questions and improving understanding of advanced SQL concepts like subqueries, joins, and aggregations.
 
----
-
-## 🎯 Objectives
+## Objectives
 - Complete remaining SQL practice questions
-- Improve problem-solving using SQL
-- Understand advanced query patterns
+- Improve SQL problem-solving skills
+- Learn advanced query patterns
 
----
+## Topics Covered
 
-## 🧠 Topics Covered
-
-### 🔹 Subqueries
+### Subqueries
 - Scalar subqueries
 - Correlated subqueries
 - Nested queries using SELECT inside WHERE
 
-### 🔹 Advanced Aggregations
+### Advanced Aggregations
 - Using GROUP BY with HAVING
-- Combining multiple conditions
+- Combining multiple conditions in queries
 
-### 🔹 Joins (Advanced Usage)
+### Advanced Joins
 - LEFT JOIN with conditions
 - Handling NULL values in joins
 
-### 🔹 Ranking & Filtering
-- Finding highest, second highest, third highest values
-- Comparing with averages
+### Ranking and Filtering
+- Finding highest, second highest, and third highest values
+- Comparing records with average values
 
----
+## Tools Used
+- DB Fiddle for executing SQL queries
+- GitHub for organizing and documenting work
 
-## 🛠️ Tools Used
-- DB Fiddle (for executing SQL queries)
-- GitHub (for organizing and documenting work)
+## Work Completed
+- Completed remaining 25 SQL questions
+- Practiced subqueries and nested queries
+- Implemented real-world query scenarios
+- Updated queries.sql and output.txt files
 
----
-
-## ✅ Work Completed
-- ✔️ Completed remaining **25 SQL questions**
-- ✔️ Practiced subqueries and nested queries
-- ✔️ Implemented real-world query scenarios
-- ✔️ Updated queries.sql and output.txt
-
----
-
-## 📊 Key Examples Practiced
+## Key Examples Practiced
 - Finding employees earning above average salary
-- Finding nth highest salary (2nd, 3rd highest)
+- Finding nth highest salary
 - Departments with highest average salary
 - Employees working in departments with multiple projects
 
----
-
-## ⚠️ Challenges Faced
+## Challenges Faced
 - Writing correlated subqueries
 - Understanding nested query logic
-- Handling edge cases with NULL values
+- Handling NULL values in joins
 
----
+## Key Learnings
+- Subqueries help simplify complex problems
+- GROUP BY with HAVING is useful for filtering aggregated data
+- Joins are important for combining multiple tables
+- Writing clean and readable SQL queries improves understanding
 
-## 📚 Key Learnings
-- Subqueries can simplify complex problems
-- GROUP BY + HAVING is powerful for filtering aggregated data
-- Joins are essential for combining multiple tables
-- Writing clean and readable SQL is important
-
----
-
-## ✨ Conclusion
-Day 2 helped in strengthening SQL fundamentals and building confidence in solving more complex queries. It also improved my understanding of how SQL is used in real-world data scenarios.
-
----
+## Conclusion
+Day 2 helped strengthen SQL fundamentals and improved confidence in solving complex SQL queries. It also provided better understanding of real-world SQL usage in data-related scenarios.
