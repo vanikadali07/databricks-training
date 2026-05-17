@@ -1,28 +1,27 @@
---Q:For each employee:Convert emp_name to proper case ---upper /lower ---Initcap (CamelCase),Calculate total income = base_salary + bonus (NULL safe) +,Round total income to nearest integer,Extract joining year, Use CASE to classify:,Senior if experience > 7 years,Mid if between 4 and 7,Junior otherwise
-Query:
-      SELECT 
-             emp_id,
-      
-             UPPER(emp_name) AS upper_name,
-      
-             LOWER(emp_name) AS lower_name,
-      
-             INITCAP(emp_name) AS camel_case_name,
-      
-             ROUND(base_salary + IFNULL(bonus,0)) AS total_income,
-      
-             YEAR(joining_date) AS joining_year,
-      
-             TIMESTAMPDIFF(YEAR, joining_date, CURDATE()) AS experience_years,
-      
-             CASE
-                  WHEN TIMESTAMPDIFF(YEAR, joining_date, CURDATE()) > 7
-                       THEN 'Senior'
-      
-                  WHEN TIMESTAMPDIFF(YEAR, joining_date, CURDATE()) BETWEEN 4 AND 7
-                       THEN 'Mid'
-      
-                  ELSE 'Junior'
-             END AS employee_level
-      
-      FROM employee_payments;
+--Q1: Employee Login Discipline & Performance Classification
+--     Proper case name, weekday/weekend check,
+--     working hours calculation, rounding, and performance classification.
+
+SELECT 
+       emp_id,
+       CONCAT(
+            UPPER(LEFT(emp_name,1)),
+            LOWER(SUBSTRING(emp_name,2))
+       ) AS proper_emp_name,
+       CASE 
+            WHEN DAYNAME(login_time) IN ('Saturday','Sunday')
+                 THEN 'Weekend'
+            ELSE 'Weekday'
+       END AS day_type,
+       ROUND(TIMESTAMPDIFF(MINUTE, login_time, logout_time)/60, 2) AS working_hours,
+       CASE
+            WHEN DAYNAME(login_time) NOT IN ('Saturday','Sunday')
+                 AND (TIMESTAMPDIFF(MINUTE, login_time, logout_time)/60) >= 8
+                 THEN 'Good Performer'
+
+            WHEN DAYNAME(login_time) NOT IN ('Saturday','Sunday')
+                 AND (TIMESTAMPDIFF(MINUTE, login_time, logout_time)/60) < 6
+                 THEN 'Bad Performer'
+            ELSE 'Weekend Login'
+       END AS performance_status
+FROM employee_login;
