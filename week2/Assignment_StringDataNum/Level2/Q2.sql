@@ -1,32 +1,29 @@
---Q: Analyze order delivery details with customer name in uppercase,
---   calculate delivery days, replace NULL delivery date with today,
---   truncate order amount to 1 decimal,
---   and classify delivery status.
+--Q2: Attendance & Productivity Check (Last 7 Days Analysis)
+--     Uppercase name, last 7 days filter, weekday/weekend,
+--     working hours, productivity classification.
 
 SELECT 
-       order_id,
-
-       UPPER(customer_name) AS customer_name,
-
-       order_date,
-
-       IFNULL(delivery_date, CURDATE()) AS final_delivery_date,
-
-       DATEDIFF(IFNULL(delivery_date, CURDATE()), order_date) AS delivery_days,
-
-       TRUNCATE(order_amount, 1) AS truncated_amount,
-
+       emp_id,
+       UPPER(emp_name) AS upper_emp_name,
+       login_date,
+       CASE 
+            WHEN login_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+                 THEN 'Last 7 Days'
+            ELSE 'Older'
+       END AS recency_status,
+       CASE 
+            WHEN DAYNAME(login_date) IN ('Saturday','Sunday')
+                 THEN 'Weekend'
+            ELSE 'Weekday'
+       END AS day_type,
+       TIMESTAMPDIFF(HOUR, login_time, logout_time) AS working_hours,
        CASE
-            WHEN delivery_date IS NULL
-                 THEN 'Pending'
-
-            WHEN DATEDIFF(delivery_date, order_date) = 0
-                 THEN 'Same-day'
-
-            WHEN DATEDIFF(delivery_date, order_date) > 3
-                 THEN 'Delayed'
-
-            ELSE 'Normal'
-       END AS delivery_status
-
-FROM orders_delivery;
+            WHEN login_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+                 AND TIMESTAMPDIFF(HOUR, login_time, logout_time) >= 8
+                 THEN 'Active & Productive'
+            WHEN login_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+                 AND TIMESTAMPDIFF(HOUR, login_time, logout_time) < 8
+                 THEN 'Active but Low Hours'
+            ELSE 'Absent from Last 7 Days'
+       END AS attendance_status
+FROM attendance_log;
