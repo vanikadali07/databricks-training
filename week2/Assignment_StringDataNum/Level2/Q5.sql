@@ -1,33 +1,29 @@
---Q: Display loan EMI and risk categorization details with uppercase customer name,
---   monthly interest calculation using POWER function,
---   years since loan start,
---   rounded EMI,
---   and risk classification.
+--Q5: Absenteeism vs Performance Correlation
+--     Last 7 days check, weekday/weekend, floor hours,
+--     performance classification.
 
 SELECT 
-       loan_id,
-
-       UPPER(customer_name) AS customer_name,
-
-       ROUND(
-              (loan_amount * (interest_rate/1200) * 
-              POWER(1 + (interest_rate/1200), 12))
-              /
-              (POWER(1 + (interest_rate/1200), 12) - 1)
-       ) AS emi,
-
-       POWER(1 + (interest_rate/1200), 12) AS monthly_interest_factor,
-
-       TIMESTAMPDIFF(YEAR, loan_start, CURDATE()) AS loan_years,
-
+       emp_id,
+       emp_name,
+       work_date,
+       CASE 
+            WHEN work_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+                 THEN 'Last 7 Days'
+            ELSE 'Old Record'
+       END AS recency_status,
+       CASE 
+            WHEN DAYNAME(work_date) IN ('Saturday','Sunday')
+                 THEN 'Weekend'
+            ELSE 'Weekday'
+       END AS day_type,
+       FLOOR(TIMESTAMPDIFF(MINUTE, login_time, logout_time)/60) AS working_hours,
        CASE
-            WHEN interest_rate > 9
-                 THEN 'High Risk'
-
-            WHEN interest_rate BETWEEN 8 AND 9
-                 THEN 'Medium Risk'
-
-            ELSE 'Low Risk'
-       END AS risk_category
-
-FROM loan_details;
+            WHEN work_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+                 AND DAYNAME(work_date) NOT IN ('Saturday','Sunday')
+                 AND TIMESTAMPDIFF(MINUTE, login_time, logout_time)/60 >= 8
+                 THEN 'Consistent Performer'
+            WHEN TIMESTAMPDIFF(MINUTE, login_time, logout_time)/60 < 6
+                 THEN 'Irregular Performer'
+            ELSE 'Absent / Old Record'
+       END AS performance_status
+FROM performance_tracker;
