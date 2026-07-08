@@ -10,7 +10,7 @@ This phase focuses on building a complete ETL (Extract, Transform, Load) pipelin
 
 ### Extract
 
-* Read `customers.csv`
+* Read `customers.csv` 
 * Read `sales.csv`
 
 ### Transform
