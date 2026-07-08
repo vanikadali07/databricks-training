@@ -4,114 +4,114 @@ from pyspark.sql.functions import *
 
 spark = SparkSession.builder.appName("Spark Playground").getOrCreate()
 
-# Load the customers.csv dataset
+# Load datasets
 customers = spark.read.format("csv") \
     .option("header", "true") \
     .load("/samples/customers.csv")
 
-# Load the orders.csv dataset
-orders = spark.read.format("csv") \
+sales = spark.read.format("csv") \
     .option("header", "true") \
-    .load("/samples/orders.csv")
+    .load("/samples/sales.csv")
 
-# Show datasets
+# Display datasets
 customers.show(5)
-orders.show(5)
+sales.show(5)
 
-# Display DataFrames
 display(customers)
-display(orders)
+display(sales)
 
-# Display schema
+# Print schema
 customers.printSchema()
-orders.printSchema()
+sales.printSchema()
 
-# ---------------------------
+# --------------------------------------------------
 # Data Cleaning
-# ---------------------------
+# --------------------------------------------------
 
 customers = customers.dropna(subset=["customer_id"])
-orders = orders.dropna(subset=["customer_id"])
+sales = sales.dropna(subset=["customer_id"])
 
-# Convert amount column to numeric
-orders = orders.withColumn("amount", col("amount").cast("double"))
+# Convert columns to appropriate data types
+sales = sales.withColumn("total_amount", col("total_amount").cast("double"))
+sales = sales.withColumn("quantity", col("quantity").cast("int"))
 
-# ---------------------------
+# --------------------------------------------------
 # 1. Total order amount for each customer
-# ---------------------------
+# --------------------------------------------------
 
 print("1. Total Order Amount for Each Customer")
 
-orders.groupBy("customer_id") \
-    .agg(sum("amount").alias("total_amount")) \
+sales.groupBy("customer_id") \
+    .agg(sum("total_amount").alias("total_order_amount")) \
     .show()
 
-# ---------------------------
+# --------------------------------------------------
 # 2. Top 3 customers by total spend
-# ---------------------------
+# --------------------------------------------------
 
 print("2. Top 3 Customers by Total Spend")
 
-orders.groupBy("customer_id") \
-    .agg(sum("amount").alias("total_spend")) \
+sales.groupBy("customer_id") \
+    .agg(sum("total_amount").alias("total_spend")) \
     .orderBy(desc("total_spend")) \
     .limit(3) \
     .show()
 
-# ---------------------------
+# --------------------------------------------------
 # 3. Customers with no orders
-# ---------------------------
+# --------------------------------------------------
 
 print("3. Customers with No Orders")
 
 customers.join(
-    orders,
+    sales,
     "customer_id",
     "left_anti"
 ).show()
 
-# ---------------------------
-# 4. City-wise total revenue
-# ---------------------------
+# --------------------------------------------------
+# 4. City-wise Total Revenue
+# --------------------------------------------------
 
 print("4. City-wise Total Revenue")
 
 customers.join(
-    orders,
+    sales,
     "customer_id",
     "inner"
 ).groupBy("city") \
- .agg(sum("amount").alias("revenue")) \
+ .agg(sum("total_amount").alias("revenue")) \
+ .orderBy(desc("revenue")) \
  .show()
 
-# ---------------------------
+# --------------------------------------------------
 # 5. Average order amount per customer
-# ---------------------------
+# --------------------------------------------------
 
 print("5. Average Order Amount per Customer")
 
-orders.groupBy("customer_id") \
-    .agg(avg("amount").alias("average_amount")) \
+sales.groupBy("customer_id") \
+    .agg(avg("total_amount").alias("average_order_amount")) \
     .show()
 
-# ---------------------------
+# --------------------------------------------------
 # 6. Customers with more than one order
-# ---------------------------
+# --------------------------------------------------
 
 print("6. Customers with More Than One Order")
 
-orders.groupBy("customer_id") \
-    .agg(count("*").alias("total_orders")) \
+sales.groupBy("customer_id") \
+    .agg(count("sale_id").alias("total_orders")) \
     .filter(col("total_orders") > 1) \
     .show()
 
-# ---------------------------
+# --------------------------------------------------
 # 7. Sort customers by total spend descending
-# ---------------------------
+# --------------------------------------------------
 
 print("7. Customers Sorted by Total Spend")
 
-orders.groupBy("customer_id") \
-    .agg(sum("amount").alias("total_spend")) \
+sales.groupBy("customer_id") \
+    .agg(sum("total_amount").alias("total_spend")) \
     .orderBy(desc("total_spend")) \
     .show()
