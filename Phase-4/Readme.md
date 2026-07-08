@@ -13,7 +13,7 @@ Develop an end-to-end ETL pipeline using PySpark to generate business insights f
 * Read `customers.csv`
 * Read `sales.csv`
 
-### Transform
+### Transform 
 
 * Inspect datasets
 * Remove null customer IDs
