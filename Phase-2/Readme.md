@@ -2,7 +2,7 @@
 
 ## Objective
 
-Bridge the gap between SQL and PySpark by implementing joins, aggregations, sorting, and filtering using the Spark Playground sample datasets.
+Bridge the  gap between SQL and PySpark by implementing joins, aggregations, sorting, and filtering using the Spark Playground sample datasets.
 
 ---
 
